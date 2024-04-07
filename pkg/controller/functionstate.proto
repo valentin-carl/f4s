@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "pkg/controller";
+
+package controller;
+
+message FunctionInstanceRequest {
+  string FunctionName = 1;
+}
+
+message FunctionInstanceResponse {
+  string Url = 1;
+}
+
+message StreamClosedNotification {
+  string FunctionName = 1;
+  string Url = 2;
+}
+
+message StreamClosedNotificationResponse {
+  // TODO replace with something useful
+  bool ok = 1;
+}
+
+service FunctionControlService {
+  rpc GetInstance(FunctionInstanceRequest) returns (FunctionInstanceResponse) {}
+  rpc NotifyStreamClosed(StreamClosedNotification) returns (StreamClosedNotificationResponse) {}
+}

@@ -199,3 +199,5 @@ func DecrementCurrentWorkerCount(ctx context.Context, client *clientv3.Client, f
 		return -1, errors.New(errorMsg)
 	}
 }
+
+// TODO add code to delete key/value pairs if function instances are destroyed

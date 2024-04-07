@@ -22,7 +22,7 @@ message StreamClosedNotificationResponse {
   bool ok = 1;
 }
 
-service FunctionControlService {
+service FunctionStateService {
   rpc GetInstance(FunctionInstanceRequest) returns (FunctionInstanceResponse) {}
   rpc NotifyStreamClosed(StreamClosedNotification) returns (StreamClosedNotificationResponse) {}
 }

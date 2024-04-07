@@ -72,6 +72,8 @@ func GetCurrentWorkersForFunction(ctx context.Context, client *clientv3.Client, 
 		return nil, err
 	}
 
+	// TODO filter out any containers where currWorkerCount >= maxWorkerCount here so controller.go doesn't need to make new requests for maxWorkerCount
+
 	for _, c := range r.Kvs {
 		key := string(c.Key)
 		value := string(c.Value)
@@ -178,7 +180,7 @@ func DecrementCurrentWorkerCount(ctx context.Context, client *clientv3.Client, f
 
 	newCurrentWorkerCount := currentWorkerCount - 1
 	txResult, err := client.Txn(ctx).If(
-		// TODO figure out why "<" and ">" only work up to currentWorkerCount 2
+		// TODO figure out why "<" and ">" only work for up to currentWorkerCount 2
 		clientv3.Compare(clientv3.Value(basePath+curr), "!=", strconv.Itoa(0)),
 	).Then(
 		clientv3.OpPut(basePath+curr, strconv.Itoa(newCurrentWorkerCount)),
@@ -198,6 +200,10 @@ func DecrementCurrentWorkerCount(ctx context.Context, client *clientv3.Client, f
 		log.Print(color.YellowString(errorMsg))
 		return -1, errors.New(errorMsg)
 	}
+}
+
+func GetUrlForContainer(ctx context.Context, client *clientv3.Client, functionName string, containerId string) string {
+	// TODO
 }
 
 // TODO add code to delete key/value pairs if function instances are destroyed

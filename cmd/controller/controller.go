@@ -71,4 +71,6 @@ func main() {
 		}
 	}
 
+	// TODO move most of this code to test file
+
 }

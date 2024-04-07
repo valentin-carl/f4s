@@ -18,123 +18,122 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// FunctionControlServiceClient is the client API for FunctionControlService service.
+// FunctionStateServiceClient is the client API for FunctionStateService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type FunctionControlServiceClient interface {
+type FunctionStateServiceClient interface {
 	GetInstance(ctx context.Context, in *FunctionInstanceRequest, opts ...grpc.CallOption) (*FunctionInstanceResponse, error)
 	NotifyStreamClosed(ctx context.Context, in *StreamClosedNotification, opts ...grpc.CallOption) (*StreamClosedNotificationResponse, error)
 }
 
-type functionControlServiceClient struct {
+type functionStateServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewFunctionControlServiceClient(cc grpc.ClientConnInterface) FunctionControlServiceClient {
-	return &functionControlServiceClient{cc}
+func NewFunctionStateServiceClient(cc grpc.ClientConnInterface) FunctionStateServiceClient {
+	return &functionStateServiceClient{cc}
 }
 
-func (c *functionControlServiceClient) GetInstance(ctx context.Context, in *FunctionInstanceRequest, opts ...grpc.CallOption) (*FunctionInstanceResponse, error) {
+func (c *functionStateServiceClient) GetInstance(ctx context.Context, in *FunctionInstanceRequest, opts ...grpc.CallOption) (*FunctionInstanceResponse, error) {
 	out := new(FunctionInstanceResponse)
-	err := c.cc.Invoke(ctx, "/controller.FunctionControlService/GetInstance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/controller.FunctionStateService/GetInstance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *functionControlServiceClient) NotifyStreamClosed(ctx context.Context, in *StreamClosedNotification, opts ...grpc.CallOption) (*StreamClosedNotificationResponse, error) {
+func (c *functionStateServiceClient) NotifyStreamClosed(ctx context.Context, in *StreamClosedNotification, opts ...grpc.CallOption) (*StreamClosedNotificationResponse, error) {
 	out := new(StreamClosedNotificationResponse)
-	err := c.cc.Invoke(ctx, "/controller.FunctionControlService/NotifyStreamClosed", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/controller.FunctionStateService/NotifyStreamClosed", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// FunctionControlServiceServer is the server API for FunctionControlService service.
-// All implementations must embed UnimplementedFunctionControlServiceServer
+// FunctionStateServiceServer is the server API for FunctionStateService service.
+// All implementations must embed UnimplementedFunctionStateServiceServer
 // for forward compatibility
-type FunctionControlServiceServer interface {
+type FunctionStateServiceServer interface {
 	GetInstance(context.Context, *FunctionInstanceRequest) (*FunctionInstanceResponse, error)
 	NotifyStreamClosed(context.Context, *StreamClosedNotification) (*StreamClosedNotificationResponse, error)
-	mustEmbedUnimplementedFunctionControlServiceServer()
+	mustEmbedUnimplementedFunctionStateServiceServer()
 }
 
-// UnimplementedFunctionControlServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedFunctionControlServiceServer struct {
+// UnimplementedFunctionStateServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedFunctionStateServiceServer struct {
 }
 
-func (UnimplementedFunctionControlServiceServer) GetInstance(context.Context, *FunctionInstanceRequest) (*FunctionInstanceResponse, error) {
+func (UnimplementedFunctionStateServiceServer) GetInstance(context.Context, *FunctionInstanceRequest) (*FunctionInstanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInstance not implemented")
 }
-func (UnimplementedFunctionControlServiceServer) NotifyStreamClosed(context.Context, *StreamClosedNotification) (*StreamClosedNotificationResponse, error) {
+func (UnimplementedFunctionStateServiceServer) NotifyStreamClosed(context.Context, *StreamClosedNotification) (*StreamClosedNotificationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NotifyStreamClosed not implemented")
 }
-func (UnimplementedFunctionControlServiceServer) mustEmbedUnimplementedFunctionControlServiceServer() {
-}
+func (UnimplementedFunctionStateServiceServer) mustEmbedUnimplementedFunctionStateServiceServer() {}
 
-// UnsafeFunctionControlServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to FunctionControlServiceServer will
+// UnsafeFunctionStateServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FunctionStateServiceServer will
 // result in compilation errors.
-type UnsafeFunctionControlServiceServer interface {
-	mustEmbedUnimplementedFunctionControlServiceServer()
+type UnsafeFunctionStateServiceServer interface {
+	mustEmbedUnimplementedFunctionStateServiceServer()
 }
 
-func RegisterFunctionControlServiceServer(s grpc.ServiceRegistrar, srv FunctionControlServiceServer) {
-	s.RegisterService(&FunctionControlService_ServiceDesc, srv)
+func RegisterFunctionStateServiceServer(s grpc.ServiceRegistrar, srv FunctionStateServiceServer) {
+	s.RegisterService(&FunctionStateService_ServiceDesc, srv)
 }
 
-func _FunctionControlService_GetInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FunctionStateService_GetInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FunctionInstanceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FunctionControlServiceServer).GetInstance(ctx, in)
+		return srv.(FunctionStateServiceServer).GetInstance(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/controller.FunctionControlService/GetInstance",
+		FullMethod: "/controller.FunctionStateService/GetInstance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FunctionControlServiceServer).GetInstance(ctx, req.(*FunctionInstanceRequest))
+		return srv.(FunctionStateServiceServer).GetInstance(ctx, req.(*FunctionInstanceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FunctionControlService_NotifyStreamClosed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FunctionStateService_NotifyStreamClosed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StreamClosedNotification)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FunctionControlServiceServer).NotifyStreamClosed(ctx, in)
+		return srv.(FunctionStateServiceServer).NotifyStreamClosed(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/controller.FunctionControlService/NotifyStreamClosed",
+		FullMethod: "/controller.FunctionStateService/NotifyStreamClosed",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FunctionControlServiceServer).NotifyStreamClosed(ctx, req.(*StreamClosedNotification))
+		return srv.(FunctionStateServiceServer).NotifyStreamClosed(ctx, req.(*StreamClosedNotification))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// FunctionControlService_ServiceDesc is the grpc.ServiceDesc for FunctionControlService service.
+// FunctionStateService_ServiceDesc is the grpc.ServiceDesc for FunctionStateService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var FunctionControlService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "controller.FunctionControlService",
-	HandlerType: (*FunctionControlServiceServer)(nil),
+var FunctionStateService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "controller.FunctionStateService",
+	HandlerType: (*FunctionStateServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetInstance",
-			Handler:    _FunctionControlService_GetInstance_Handler,
+			Handler:    _FunctionStateService_GetInstance_Handler,
 		},
 		{
 			MethodName: "NotifyStreamClosed",
-			Handler:    _FunctionControlService_NotifyStreamClosed_Handler,
+			Handler:    _FunctionStateService_NotifyStreamClosed_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -6,13 +6,19 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+	"sync"
 	"testing"
 	"time"
 )
 
 func TestProxy(t *testing.T) {
-	proxyPort := 1234
+
+	const proxyPort = 1234
+	const nClients = 5
+
 	t.Run("proxy test", func(t *testing.T) {
+
+		log.Print("hi")
 
 		const proxyUrl = "ws://localhost:1234/echo"
 		const serverUrl = ":8080"
@@ -94,9 +100,15 @@ func TestProxy(t *testing.T) {
 
 		go server()
 		go Proxy(proxyPort)
-		go client(0, 5*time.Second)
-		time.Sleep(500 * time.Millisecond)
-		client(1, 10*time.Second)
-		time.Sleep(500 * time.Millisecond)
+		var wg sync.WaitGroup
+		for i := 0; i < nClients; i++ {
+			wg.Add(1)
+			go func(x int) {
+				log.Printf("starting client %d", x)
+				client(x, time.Duration((x+1)*5)*time.Second)
+				wg.Done()
+			}(i)
+		}
+		wg.Wait()
 	})
 }

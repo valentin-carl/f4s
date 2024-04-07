@@ -58,6 +58,7 @@ func HandleConnection(cc net.Conn) {
 	}
 
 	proxyID := ProxyID(cc, sc, functionName)
+	log.Print(proxyID)
 
 	defer func() {
 		log.Print(color.CyanString("proxy closing server connection %s <--> %s", sc.LocalAddr(), sc.RemoteAddr()))
@@ -76,7 +77,8 @@ func HandleConnection(cc net.Conn) {
 		// client -> server
 		_, err := io.Copy(sc, cc)
 		if err != nil {
-			log.Fatal(color.RedString("proxy %s error while forwarding client->server: ", proxyID, err.Error()))
+			// error is expected once client closes WebSocket connection
+			log.Print(color.RedString("proxy %s error while forwarding client->server: %s", proxyID, err.Error()))
 		}
 		log.Print(color.YellowString("proxy %s io copy server->client done", proxyID))
 	}()
@@ -84,7 +86,7 @@ func HandleConnection(cc net.Conn) {
 	// server -> client
 	_, err = io.Copy(cc, sc)
 	if err != nil {
-		log.Fatal(color.RedString("proxy %s error while forwarding server->client: ", proxyID, err.Error()))
+		log.Print(color.RedString("proxy %s error while forwarding server->client: %s", proxyID, err.Error()))
 	}
 	log.Print(color.YellowString("proxy %s io copy client->server done", proxyID))
 
@@ -108,6 +110,8 @@ func GetFunctionAddress(cc net.Conn) (string, []byte, string) {
 	n, err := cc.Read(buffer)
 	if err != nil {
 		log.Fatal(color.RedString("proxy error while reading client request to extract function name: %s", err.Error()))
+		// TODO
+		//  return error/bad request to that client instead of breaking the platform
 	}
 	request := string(buffer[:n])
 
@@ -121,7 +125,7 @@ func GetFunctionAddress(cc net.Conn) (string, []byte, string) {
 	// request function address
 	// TODO
 	//  gRPC to controller
-	addr := "ws://localhost:12345/"
+	addr := "localhost:8080"
 	return addr, buffer[:n], functionName
 }
 

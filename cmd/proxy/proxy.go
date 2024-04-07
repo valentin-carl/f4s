@@ -31,4 +31,8 @@ func main() {
 	proxy.Proxy(proxyPort)
 
 	log.Print(color.GreenString("proxy done"))
+
+	// TODO
+	//  check this out: https://github.com/fatih/pool & https://github.com/silenceper/pool
+	//  maybe create a connection pool for each function instead of handling each connection individually
 }
